@@ -124,6 +124,25 @@ public class MemberRepositoryV2 {
         }
     }
 
+    public void update(Connection con, String memberId, int money) throws SQLException {
+        String sql = "update member set money=? where member_id=?";
+
+        PreparedStatement pstmt = null;
+
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, money);
+            pstmt.setString(2, memberId);
+            int resultSize = pstmt.executeUpdate();
+            log.info("resultSize={}", resultSize);
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        } finally {
+            JdbcUtils.closeStatement(pstmt);
+        }
+    }
+
     public void delete(String memberId) throws SQLException {
         String sql = "delete from member where member_id=?";
 
